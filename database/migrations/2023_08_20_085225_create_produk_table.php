@@ -16,8 +16,10 @@ class CreateProdukTable extends Migration
         Schema::create('produk', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('kode');
+            $table->string('kode')->unique()->nullable();            
             $table->string('komisi');
+            $table->string('foto');
+
             $table->bigInteger('harga');
             $table->timestamps();
         });

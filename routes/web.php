@@ -76,3 +76,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     });
     // end route menu customer 
  });
+
+
+ // route penel dashboard for admin
+Route::prefix('member')->middleware(['auth', 'member'])->group(function () {
+// route menu profile 
+    Route::prefix('profile')->group(function () {
+        Route::get('/',  [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+         Route::post('/edit-profile/{id}',[App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    });
+    // end route menu profile 
+});

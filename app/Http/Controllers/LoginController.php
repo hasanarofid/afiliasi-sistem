@@ -31,24 +31,37 @@ class LoginController extends Controller
             $user = Socialite::driver('google')->user();
             // if the user exits, use that user and login
             $finduser = User::where('google_id', $user->id)->first();
+            // dd($finduser);
             if($finduser){
                 //if the user exists, login and show dashboard
                 Auth::login($finduser);
-                return redirect('/dashboard');
+               $id = Auth::user()->id;
+                $member =  User::find($id);
+                // dd($id);
+                return redirect()->route('profile.index');
             }else{
                 //user is not yet created, so create first
-                $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'google_id'=> $user->id,
-                    'password' => encrypt('')
-                ]);
+                $newUser = new User();
+                $newUser->name = $user->name;
+                $newUser->email = $user->email;
+                $newUser->google_id = $user->id;
+                $newUser->google_id = $user->id;
+                $newUser->role = 'Member';
+                $newUser->password =encrypt('');
+                $newUser->save();
+
+
+                //every user needs a team for dashboard/jetstream to work.
+                //create a personal team for the user
+             
                 //every user needs a team for dashboard/jetstream to work.
                 //create a personal team for the user
              
                 Auth::login($newUser);
+        // dd($id);
+         return redirect()->route('profile.index');
                 // go to the dashboard
-                return redirect('/dashboard');
+                // return redirect('dashboard');
             }
             //catch exceptions
         } catch (Exception $e) {
